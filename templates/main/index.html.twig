@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Acceuil
+{% endblock %}
+
+{% block body %}
+<div class="container mt-2 search">
+{{ form(form) }}
+</div>
+	<div class="container mt-4">
+		<h1 class="text-center mb-5">Bienvenue sur Récif annonces</h1>
+			{% for message in app.flashes('success') %}
+				<div class="alert alert-success" role="alert">{{ message }}</div>
+			{% endfor %}
+		<div class="container">
+			{% for annonce in annonces %}
+
+				<div class="card mb-3 mt-4 align-center" style="max-width: 700px;">
+					<div class="row no-gutters">
+						<div class="col-md-4">
+							<img src="{{ asset('uploads/images/annonces/' ~ annonce.images[0].name)|imagine_filter('square') }}" class="card-img" alt="{{ annonce.title }}">
+						</div>
+						<div class="col-md-8">
+							<div class="card-body">
+								<h5 class="card-title">
+									<a href="{{ path('annonces_details', {slug: annonce.slug}) }}">{{ annonce.title }}</a>
+								</h5>
+								<div class="text-right">
+						{% if is_granted("ROLE_USER") %}
+                            {% set isFavorite = false %}
+							{% for favoris in annonce.favoris %}
+								{% if favoris.id == app.user.id %}
+                                    {% set isFavorite = true %}
+								{% endif %}    
+							{% endfor %}
+                            {% if isFavorite %}
+								<a href="{{ path('annonces_retrait_favoris', {id: annonce.id}) }}" class="btn-link js-like"><i class="fas fa-heart text-danger"></i></a>
+                            {% else %}
+								<a href="{{ path('annonces_ajout_favoris', {id: annonce.id}) }}" class="btn-link js-like"><i class="far fa-heart text-danger"></i></a>
+                            {% endif %}
+
+						{% else %}
+							<i class="far fa-heart text-danger"></i>
+						{% endif %}
+						
+					</div>
+								<p class="card-text">Catégorie :
+									<small>{{ annonce.categories.name }}</small>
+								</p>
+								<p class="card-text">{{ annonce.price}} €</p>
+								<p class="card-text">
+									<small class="text-muted">Publié le
+										{{annonce.createdAt | date ('d/m/Y à H:i')}}
+										par
+										<strong>{{annonce.users.username}}</strong>
+									</small>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+{% endblock %}

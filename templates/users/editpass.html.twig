@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification du profil de {{ app.user.firstname }} {{ app.user.name }}{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="left ">
+        <ul>
+            <a href="{{ path('app_home') }}">
+                <li class="item-menu">
+                    <i class="fa fa-home fa-2x" aria-hidden="true"></i> 
+                    <span class="menu">Acceuil</span>
+                </li>
+            </a> 
+            <a href="{{ path('users') }}">
+                <li class="item-menu">
+                    <i class="fa fa-user fa-2x" aria-hidden="true"></i> 
+                    <span class="menu">Mon profil</span>
+                </li>
+            </a>
+        </ul>
+    </div> <!-- end left -->
+    <div class="container ">
+    <div class="content">
+        {% for error in app.flashes('error') %}
+        <div class="alert alert-danger" role="alert">{{ error }}</div>
+        {% endfor %}
+
+    
+        <h1>Modification du Mot de passe de {{ app.user.firstname }} {{ app.user.name }}</h1>
+        <form method="post">
+            <div class="form-group">
+                <label for="pass">Mot de passe</label>
+                <input type="password" id="pass" name="pass" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="pass2">Confirmer le mot de passe</label>
+                <input type="password" id="pass2" name="pass2" class="form-control">
+            </div>
+              <button type="submit" class="btn btn-primary">Valider</button>
+        </form>
+    </div>
+</div>    
+</div>
+</div>
+{% endblock %}

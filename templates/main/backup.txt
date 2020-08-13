@@ -1,0 +1,63 @@
+
+vue:
+
+<div class="text-right">
+									<a href="{{ path('annonces_post_like', {id: annonce.id}) }}" class="btn-link js-like">
+									{% if app.user and annonce.islikedByUser(app.user) %}
+											<i class="fas fa-heart text-danger"></i>
+									{% else %}
+											<i class="far fa-heart text-danger"></i>
+									{% endif %}											
+											<span class="js-likes">  </span>
+											<span class="js-label"></span>
+											</a>
+
+								</div>
+
+controller:
+
+    /**
+     * permet de liker ou unliker une annonce
+     * @Route("/post/{id}/like", name="post_like")
+     */
+    public function like(Annonces $post, PostLikeRepository $likeRepo) : Response
+    {
+        $user = $this->getUser();
+
+        if(!$user) return $this->json([
+            'code' => 403,
+            'message' => "unauthorized"
+        ], 403);
+
+        if($post->isLikedByUser($user)) {
+            $like = $likeRepo->findOneBy([
+                'post' => $post,
+                'user' => $user
+            ]);
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($like);
+            $em->flush();
+
+            return $this->json([
+                'code' => 200,
+                'message' => "like bien supprimé",
+                'likes' => $likeRepo->count(['post' => $post])
+            ],200);
+
+        }
+
+        $like = new PostLike();
+        $like->setPost($post);
+        $like->setUser($user);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($like);
+            $em->flush();
+
+        
+            return $this->json([
+                'code' => 200,
+                'message' => "like bien ajouté",
+                'likes' => $likeRepo->count(['post' => $post])
+            ],200);
+    }

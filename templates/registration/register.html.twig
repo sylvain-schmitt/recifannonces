@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription
+{% endblock %}
+
+{% block body %}
+	{% for flashError in app.flashes('verify_email_error') %}
+		<div class="alert alert-danger" role="alert">{{ flashError }}</div>
+	{% endfor %}
+
+
+	<div class="container">
+		<br>
+		<h1>Inscription</h1>
+		{{ form_start(registrationForm) }}
+		<br>
+		<p>Pseudo<strong>
+				sera afficher sur vos annonces</strong>
+		</p>
+		{{ form_widget(registrationForm.username) }}
+		<br><br>
+		<br>
+		<p>Nom</p>
+		{{ form_widget(registrationForm.name) }}
+		<br><br>
+		<br>
+		<p>Prenom</p>
+		{{ form_widget(registrationForm.firstname) }}
+		<br><br>
+		<br>
+		<p>Mon Email</p>
+		{{ form_widget(registrationForm.email) }}
+		<br><br>
+		<p>Mot de passe</p>
+		{{ form_widget(registrationForm.plainPassword, {
+            label: 'Mot de passe'
+        }) }}
+		<br>
+		<br>
+		<p>{{ form_widget(registrationForm.agreeTerms) }}
+			J'accepte que mes informations soient stockées dans la base de données de Récif Annonces pour la gestion de mon compte. J'ai bien noté qu'en aucun cas ces données ne seront cédées à des tiers.</p>
+
+		<br>
+		<button type="submit" class="btn btn-primary">Inscription</button>
+		{{ form_end(registrationForm) }}
+	</div>
+{% endblock %}

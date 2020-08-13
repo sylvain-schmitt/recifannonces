@@ -1,0 +1,11 @@
+{% if app.request.attributes.get('_route') == 'users_annonces_edit' %}
+			<h1>Une annonce vient d'etre modifier</h1>
+		{% else %}
+			<h1>Nouvelle annonce</h1>
+		{% endif %}
+
+
+
+<p>Sujet : {{ sujet }}</p>
+
+<p>Message : {{ message|raw }} </p>
